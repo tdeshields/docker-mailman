@@ -1,0 +1,11 @@
+inet_interfaces = localhost, 10.89.0.1
+mynetworks = mailman_web, mailman-core
+recipient_delimiter = +
+unknown_local_recipient_reject_code = 550
+owner_request_special = no
+transport_maps =
+    regexp:/opt/mailman/core/var/data/postfix_lmtp
+local_recipient_maps =
+    regexp:/opt/mailman/core/var/data/postfix_lmtp
+relay_domains =
+    regexp:/opt/mailman/core/var/data/postfix_domains
