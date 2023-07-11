@@ -5,3 +5,5 @@ The files in this directory are the configuration changes that were made to make
 - settings_local.py is placed locally in /opt/mailman/core/ and is passed into the container mailman-core.
 
 - Take the lines in main.cf and add them to the /etc/postfix/main.cf on the host machine. This points the MTA postfix towards the container network gateway and defines the mailman hosts. 
+
+- env_setup.sh simply sets up the directories with the proper config files that are then mapped into the containers for the custom configuration. 
