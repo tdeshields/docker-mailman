@@ -5,7 +5,7 @@
 # checking for or setting up the mailman-web local directories
 if [ -d "/opt/mailman/web" ];
 then
-	exit 0
+	:
 else
 	mkdir -p /opt/mailman/web
 fi
@@ -14,7 +14,7 @@ fi
 # checking for or setting up mailman-core local directories
 if [ -d "/opt/mailman/core" ];
 then
-	exit 0
+	:
 else
 	mkdir -p /opt/mailman/core
 fi
@@ -23,7 +23,7 @@ fi
 # Checking for or setting up the directory for our database backup
 if [ -d "/opt/backup" ];
 then
-	exit 0
+	:
 else
 	mkdir -p /opt/backup
 fi
@@ -32,7 +32,7 @@ fi
 # Checking for or setting up the directory for our ssl certs
 if [ -d "/opt/mailman/ssl" ];
 then
-	exit 0
+	:
 else
 	mkdir -p /opt/mailman/ssl
 fi
@@ -41,7 +41,7 @@ fi
 # Checking for or setting up the directory for nginx proxy
 if [ -d "/opt/mailman/nginx/conf.d" ];
 then
-	exit 0
+	:
 else
 	mkdir -p /opt/mailman/nginx/conf.d
 fi
@@ -94,7 +94,7 @@ fi
 
 if ! grep -qF "$line2" "$postfix_conf";
 then
-	sed -i 's/^#mynetworks = hash:/etc/postfix/network_table/&\nmynetworks = mailman-web, mailman-core/' "$postfix_conf"
+	sed -i 's/^#mynetworks = hash:/etc/postfix/network_table$/&\nmynetworks = mailman-web, mailman-core/' "$postfix_conf"
 fi
 
 if grep -qF "$line3" "$postfix_conf";
