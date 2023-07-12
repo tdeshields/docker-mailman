@@ -64,7 +64,8 @@ MAILMAN_ARCHIVER_FROM = (os.environ.get('MAILMAN_HOST_IP', gethostbyname(os.envi
 
 # Application definition
 
-INSTALLED_APPS = []
+# installed apps being moved past default apps declaration to include both
+#INSTALLED_APPS = []
 DEFAULT_APPS = [
     'hyperkitty',
     'postorius',
@@ -89,6 +90,10 @@ DEFAULT_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 ]
+#for ldap
+INSTALLED_APPS = [
+     'django_auth_ldap',
+] + DEFAULT_APPS
 
 MAILMAN_WEB_SOCIAL_AUTH = [
     'django_mailman3.lib.auth.fedora',
