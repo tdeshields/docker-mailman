@@ -29,3 +29,17 @@ cd /opt/mailman/docker-mailman
 cp custom/settings_local.py ../web/settings_local.py
 cp custom/mailman-extra.cfg ../core/mailman-extra.cfg
 
+# Setting up the database backup and logrotate
+logrotate_path="/etc/logrotate.d/db_backup"
+logrotate_conf="/opt/mailman/docker-mailman/custom/db_backup"
+
+cp "$logrotate_conf" "$logrotate_path"
+
+chown root:root "$logrotate_path"
+chmod 644 "$logrotate_path"
+
+cron_dump="00 22 * * * /opt/mailman/docker-mailman/custom/db_backup.sh"
+cron_log="05 22 * * * /usr/sbin/logrotate /etc/logrotate.d/db_backup --state /var/lib/logrotate/db_status"
+
+(crontab -l 2>/dev/null; echo "$cron_dump") | crontab -
+(crontab -l 2>/dev/null; echo "$cron_log") | crontab -
