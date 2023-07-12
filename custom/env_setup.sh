@@ -68,3 +68,41 @@ cron_log="05 22 * * * /usr/sbin/logrotate /etc/logrotate.d/db_backup --state /va
 
 (crontab -l 2>/dev/null; echo "$cron_dump") | crontab -
 (crontab -l 2>/dev/null; echo "$cron_log") | crontab -
+
+
+
+# Disabling sendmail so it doesn't fight with postfix
+systemctl disable sendmail
+systemctl stop sendmail
+
+# Checking for or setting up postfix for use as the MTA
+if ! command -v postfix &>/dev/null;
+then
+	yum install -y postfix
+fi
+
+postfix_conf="/etc/postfix/main.cf"
+custom_conf="/opt/mailman/docker-mailman/custom/main.cf"
+line1="inet_interfaces = localhost, 10.89.0.1"
+line2="mynetworks = mailman-web, mailman-core"
+line3="recipient_delimiter = +"
+
+if ! grep -qF "$line1" "$postfix_conf";
+then
+	sed -i 's/^inet_interfaces = localhost$/inet_interfaces = localhost, 10.89.0.1/' "$postfix_conf"
+fi
+
+if ! grep -qF "$line2" "$postfix_conf";
+then
+	sed -i 's/^#mynetworks = hash:/etc/postfix/network_table/&\nmynetworks = mailman-web, mailman-core/' "$postfix_conf"
+fi
+
+if grep -qF "$line3" "$postfix_conf";
+then
+	sed -i 's/^#recipient_delimiter = +$/recipient_delimiter = +/'  "$postfix_conf"
+fi
+
+if [ -f "$custom_conf" ];
+then
+	cat "$custom_conf" >> "$postfix_conf"
+fi
