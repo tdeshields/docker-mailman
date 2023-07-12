@@ -5,7 +5,9 @@ permalink: /
 
 # GNU Mailman 3 Deployment with Docker
 
-
+### Custom
+Please git clone to the following directory when following the environment setup in custom
+- '/opt/mailman/'
 
 [![CircleCI](https://circleci.com/gh/maxking/docker-mailman/tree/main.svg?style=svg)](https://circleci.com/gh/maxking/docker-mailman/tree/main)
 
