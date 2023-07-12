@@ -17,9 +17,12 @@ services:
     - DATABASE_TYPE=postgres
     - DATABASE_CLASS=mailman.database.postgresql.PostgreSQLDatabase
     - HYPERKITTY_API_KEY=someapikey
+    - SMTP_PORT=25
+    - SMTP_HOST=smtp.usm.edu
+    - MTA=postfix
     ports:
-    - "127.0.0.1:8001:8001" # API
-    - "127.0.0.1:8024:8024" # LMTP - incoming emails
+    #- "127.0.0.1:8001:8001" # API
+    #- "127.0.0.1:8024:8024" # LMTP - incoming email
     networks:
       mailman:
 
@@ -38,11 +41,35 @@ services:
     - DATABASE_TYPE=postgres
     - DATABASE_URL=postgresql://mailman:mailmanpass@database/mailmandb
     - HYPERKITTY_API_KEY=someapikey
+    - SECRET_KEY=t9jhp)+8ts##r*gql7(hc9f)u)0#ctprz3cxy!+3f#sci)-38l
+    - SMTP_PORT=25
+    - SMTP_HOST=smtp.usm.edu
+    - UWSGI_STATIC_MAP=/static=/opt/mailman-web-data/static
+    - SERVE_FROM_DOMAIN=listdev.usm.edu
+    - MAILMAN_ADMIN_USER=admin
+    - MAILMAN_ADMIN_EMAIL=tony.deshields@usm.edu
     ports:
-    - "127.0.0.1:8000:8000" # HTTP
-    - "127.0.0.1:8080:8080" # uwsgi
+    #- "127.0.0.1:8000:8000" # HTTP
+    #- "127.0.0.1:8080:8080" # uwsgi
     networks:
       mailman:
+
+  mailman-nginx:
+    image: docker.io/library/nginx:latest
+    container_name: mailman-nginx
+    hostname: mailman-nginx
+    volumes:
+    - /opt/mailman/nginx/conf.d:/etc/nginx/conf.d
+    - /opt/mailman/ssl:/etc/ssl/certs
+    links:
+    - mailman-web:mailman-web
+    depends_on:
+    - mailman-web
+    ports:
+    - "443:443" # HTTPS
+    networks:
+      mailman:
+      
 
   database:
     environment:
@@ -57,9 +84,3 @@ services:
 
 networks:
   mailman:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      -
-        subnet: 172.19.199.0/24
