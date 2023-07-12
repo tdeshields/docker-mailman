@@ -5,9 +5,15 @@ permalink: /
 
 # GNU Mailman 3 Deployment with Docker
 
+
+
 ### Custom
 Please git clone to the following directory when following the environment setup in custom
-#- `/opt/mailman/`
+- `/opt/mailman/`
+
+
+
+
 
 [![CircleCI](https://circleci.com/gh/maxking/docker-mailman/tree/main.svg?style=svg)](https://circleci.com/gh/maxking/docker-mailman/tree/main)
 
@@ -78,7 +84,7 @@ The container images are available from multiple container registries. Do specif
 Rolling releases are made up of Mailman Components installed from [git
 source](https://gitlab.com/mailman). **Note that these releases are made up of
 un-released software and should be assumed to be beta quality.**
-
+https://github.com/tdeshields/docker-mailman/blob/main/README.md
 Every commit is tested with Mailman's CI infrastructure and is included in
 rolling releases only if they have passed the complete test suite.
 
