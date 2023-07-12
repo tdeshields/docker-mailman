@@ -7,7 +7,7 @@ permalink: /
 
 ### Custom
 Please git clone to the following directory when following the environment setup in custom
-- '/opt/mailman/'
+#- `/opt/mailman/`
 
 [![CircleCI](https://circleci.com/gh/maxking/docker-mailman/tree/main.svg?style=svg)](https://circleci.com/gh/maxking/docker-mailman/tree/main)
 
