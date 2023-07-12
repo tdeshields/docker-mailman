@@ -25,6 +25,9 @@ MAILMAN_EMAIL_RESTRICTIONS = 'none'
 # setting time zone globally
 TIME_ZONE = 'America/Chicago'
 
+# settings login session cookies variables
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 600
 
 # LDAP configuration
 
