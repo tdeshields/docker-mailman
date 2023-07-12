@@ -3,7 +3,8 @@
 # this script will setup the environment on a fresh machine for the docker-mailman git project. 
 
 # checking for or setting up the mailman-web local directories
-if [ -d "/opt/mailman/web" ]
+if [ -d "/opt/mailman/web" ];
+then
 	exit 0
 else
 	mkdir -p /opt/mailman/web
@@ -11,7 +12,8 @@ fi
 
 
 # checking for or setting up mailman-core local directories
-if [ -d "/opt/mailman/core" ]
+if [ -d "/opt/mailman/core" ];
+then
 	exit 0
 else
 	mkdir -p /opt/mailman/core
@@ -19,7 +21,8 @@ fi
 
 
 # Checking for or setting up the directory for our database backup
-if [ -d "/opt/backup" ]
+if [ -d "/opt/backup" ];
+then
 	exit 0
 else
 	mkdir -p /opt/backup
@@ -27,17 +30,29 @@ fi
 
 
 # Checking for or setting up the directory for our ssl certs
-if [ -d "/opt/mailman/ssl" ]
+if [ -d "/opt/mailman/ssl" ];
+then
 	exit 0
 else
 	mkdir -p /opt/mailman/ssl
 fi
 
 
+# Checking for or setting up the directory for nginx proxy
+if [ -d "/opt/mailman/nginx/conf.d" ];
+then
+	exit 0
+else
+	mkdir -p /opt/mailman/nginx/conf.d
+fi
+
+
+
 # changing to working dir and moving all the config files in the proper place
 cd /opt/mailman/docker-mailman
 cp custom/settings_local.py ../web/settings_local.py
 cp custom/mailman-extra.cfg ../core/mailman-extra.cfg
+cp custom/proxy.conf ../nginx/conf.d/proxy.conf
 
 # Setting up the database backup and logrotate
 logrotate_path="/etc/logrotate.d/db_backup"
