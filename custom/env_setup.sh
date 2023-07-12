@@ -17,12 +17,22 @@ else
 	mkdir -p /opt/mailman/core
 fi
 
+
 # Checking for or setting up the directory for our database backup
 if [ -d "/opt/backup" ]
 	exit 0
 else
 	mkdir -p /opt/backup
 fi
+
+
+# Checking for or setting up the directory for our ssl certs
+if [ -d "/opt/mailman/ssl" ]
+	exit 0
+else
+	mkdir -p /opt/mailman/ssl
+fi
+
 
 # changing to working dir and moving all the config files in the proper place
 cd /opt/mailman/docker-mailman
