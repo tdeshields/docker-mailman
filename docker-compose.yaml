@@ -45,7 +45,7 @@ services:
     - SMTP_PORT=25
     - SMTP_HOST=smtp.usm.edu
     - UWSGI_STATIC_MAP=/static=/opt/mailman-web-data/static
-    - SERVE_FROM_DOMAIN=listdev.usm.edu
+    - SERVE_FROM_DOMAIN=lists.usm.edu
     - MAILMAN_ADMIN_USER=admin
     - MAILMAN_ADMIN_EMAIL=tony.deshields@usm.edu
     ports:
