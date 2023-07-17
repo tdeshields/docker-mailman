@@ -24,6 +24,10 @@ RUN --mount=type=cache,target=/root/.cache \
     && apk del build-deps \
     && adduser -S mailman
 
+# setting the timezone
+ENV TZ=America/Chicago
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Change the working directory.
 WORKDIR /opt/mailman
 
