@@ -82,27 +82,4 @@ then
 fi
 
 postfix_conf="/etc/postfix/main.cf"
-custom_conf="/opt/mailman/docker-mailman/custom/main.cf"
-line1="inet_interfaces = localhost, 10.89.0.1"
-line2="mynetworks = mailman-web, mailman-core"
-line3="recipient_delimiter = +"
-
-if ! grep -qF "$line1" "$postfix_conf";
-then
-	sed -i 's/^inet_interfaces = localhost$/inet_interfaces = localhost, 10.89.0.1/' "$postfix_conf"
-fi
-
-if ! grep -qF "$line2" "$postfix_conf";
-then
-	sed -i 's/^#mynetworks = hash:/etc/postfix/network_table$/&\nmynetworks = mailman-web, mailman-core/' "$postfix_conf"
-fi
-
-if grep -qF "$line3" "$postfix_conf";
-then
-	sed -i 's/^#recipient_delimiter = +$/recipient_delimiter = +/'  "$postfix_conf"
-fi
-
-if [ -f "$custom_conf" ];
-then
-	cat "$custom_conf" >> "$postfix_conf"
-fi
+cp custom/main.cf /etc/postfix/main.cf
