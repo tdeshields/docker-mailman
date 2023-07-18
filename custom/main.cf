@@ -148,6 +148,7 @@ inet_protocols = all
 #
 #proxy_interfaces =
 #proxy_interfaces = 1.2.3.4
+proxy_interfaces = 131.95.7.230
 
 # The mydestination parameter specifies the list of domains that this
 # machine considers itself the final destination for.
@@ -283,7 +284,7 @@ unknown_local_recipient_reject_code = 550
 #mynetworks = 168.100.189.0/28, 127.0.0.0/8
 #mynetworks = $config_directory/mynetworks
 #mynetworks = hash:/etc/postfix/network_table
-mynetworks = mailman_web, mailman-core
+mynetworks = mailman_web, mailman-core, 131.95.7.230
 
 # The relay_domains parameter restricts what destinations this system will
 # relay mail to.  See the smtpd_recipient_restrictions description in
@@ -707,13 +708,15 @@ readme_directory = /usr/share/doc/postfix/README_FILES
 # in PEM format. Intermediate certificates should be included in general,
 # the server certificate first, then the issuing CA(s) (bottom-up order).
 #
-smtpd_tls_cert_file = /etc/pki/tls/certs/postfix.pem
+#smtpd_tls_cert_file = /etc/pki/tls/certs/postfix.pem
+smtpd_tls_cert_file = /opt/mailman/ssl/lists.usm.edu.cer
 
 # The full pathname of a file with the Postfix SMTP server RSA private key
 # in PEM format. The private key must be accessible without a pass-phrase,
 # i.e. it must not be encrypted.
 #
-smtpd_tls_key_file = /etc/pki/tls/private/postfix.key
+#smtpd_tls_key_file = /etc/pki/tls/private/postfix.key
+smtpd_tls_key_file = /opt/mailman/ssl/lists.usm.edu.key
 
 # Announce STARTTLS support to remote SMTP clients, but do not require that
 # clients use TLS encryption (opportunistic TLS inbound).
