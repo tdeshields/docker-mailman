@@ -82,4 +82,4 @@ then
 fi
 
 postfix_conf="/etc/postfix/main.cf"
-cp custom/main.cf /etc/postfix/main.cf
+cp custom/main.cf $postfix_conf
