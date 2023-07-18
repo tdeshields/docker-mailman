@@ -1,7 +1,6 @@
 /opt/backup/* {
         rotate 7
         daily
-        compress
         missingok
         notifempty
 }
