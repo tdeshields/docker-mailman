@@ -1,6 +1,0 @@
-/opt/backup/* {
-        rotate 7
-        daily
-        missingok
-        notifempty
-}
