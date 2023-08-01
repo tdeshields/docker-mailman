@@ -18,3 +18,6 @@ gzip /opt/mailman/database/$file
 
 # moving it to the proper directory
 mv /opt/mailman/database/$file.gz /opt/backup/
+
+# cleaning up older backups >7 days
+find /opt/backup -type f -name 'mailman_backup.*' -mtime +7 -exec rm {} \;
