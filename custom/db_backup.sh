@@ -4,9 +4,7 @@
 file=mailmandb_backup.$(date +"%Y%m%d%H%M")
 
 # Making sure the backup directory is present
-if [ -d "/opt/backup" ]
-	exit 0
-else
+if [ ! -d "/opt/backup" ]
 	mkdir -p /opt/backup
 fi
 
