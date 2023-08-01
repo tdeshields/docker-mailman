@@ -3,46 +3,36 @@
 # this script will setup the environment on a fresh machine for the docker-mailman git project. 
 
 # checking for or setting up the mailman-web local directories
-if [ -d "/opt/mailman/web" ];
+if [ ! -d "/opt/mailman/web" ];
 then
-	:
-else
 	mkdir -p /opt/mailman/web
 fi
 
 
 # checking for or setting up mailman-core local directories
-if [ -d "/opt/mailman/core" ];
+if [ ! -d "/opt/mailman/core" ];
 then
-	:
-else
 	mkdir -p /opt/mailman/core
 fi
 
 
 # Checking for or setting up the directory for our database backup
-if [ -d "/opt/backup" ];
+if [ ! -d "/opt/backup" ];
 then
-	:
-else
 	mkdir -p /opt/backup
 fi
 
 
 # Checking for or setting up the directory for our ssl certs
-if [ -d "/opt/mailman/ssl" ];
+if [ ! -d "/opt/mailman/ssl" ];
 then
-	:
-else
 	mkdir -p /opt/mailman/ssl
 fi
 
 
 # Checking for or setting up the directory for nginx proxy
-if [ -d "/opt/mailman/nginx/conf.d" ];
+if [ ! -d "/opt/mailman/nginx/conf.d" ];
 then
-	:
-else
 	mkdir -p /opt/mailman/nginx/conf.d
 fi
 
