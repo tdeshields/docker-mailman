@@ -18,4 +18,4 @@ gzip /opt/mailman/database/$file
 mv /opt/mailman/database/$file.gz /opt/backup/
 
 # cleaning up older backups >7 days
-find /opt/backup -type f -name 'mailmandb_backup.*' -mtime +7 -exec rm {} \;
+find /opt/backup -type f -exec stat --format="%W %n" {} + |awk -v limit=$(date -d '7 days ago' +%s) '$1 < limit {print $2}' |xargs /bin/rm -f
