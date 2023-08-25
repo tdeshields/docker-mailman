@@ -1,26 +1,39 @@
 #!/bin/bash
 
-EMAIL="linuxadmins@groups.usm.edu"
+#EMAIL="linuxadmins@groups.usm.edu"
+EMAIL="tony.deshields@usm.edu"
+ALERT_FILE="/opt/mailman/docker-mailman/custom/alert_file.json"
 
-# working dir
 cd /opt/mailman/docker-mailman
 
-# grabbing the container ID list
 for container_id in $(/bin/podman ps --format "{{.ID}}");
-do      
-        # getting the container name for email alert
+do
         container_name=$(/bin/podman inspect --format '{{.Name}}' "$container_id" |sed 's#^/##')
 
-        # checking the health of the container by the ID
-        if /bin/podman inspect --format '{{.State.Health.Status}}' "$container_id" |grep -q "unhealthy";
-        then
-                # Getting the logs from the container healthcheck
-                healthcheck_logs=$(/bin/podman inspect --format '{{json .State.Health.Log}}' "$container_id" |jq -r)
-                # creating the subject for the email
-                subject="Podman Health Alert: $container_name"
-                # packing it all together and sending in email
-                echo -e "$healthcheck_logs" | mailx -s "$subject" -S v15-compat=yes -Ssmtp-auth=none -S mta=smtp://smtp.usm.edu:25 $EMAIL
+        alert_status=$(jq -r ".[\"$container_name\"]" "$ALERT_FILE")
 
+        if /bin/podman inspect --format '{{.State.Health.Status}}' "$container_id" |grep -q "unhealthy" && [ "$alert_status" -eq 0 ];
+        then
+                healthcheck_logs=$(/bin/podman inspect --format '{{json .State.Health.Log}}' "$container_id" |jq -r '[.[-1]]')
+                subject="Podman Health Status Alert: $container_name"
+
+                echo -e "Here is the latest healthcheck log: \n$healthcheck_logs" | mailx -s "$subject" -S v15-compat=yes -Ssmtp-auth=none -S mta=smtp://smtp.usm.edu:25 $EMAIL
+
+                jq ".[\"$container_name\"] = 1" "$ALERT_FILE" > "$ALERT_FILE.tmp"
+                mv "$ALERT_FILE.tmp" "$ALERT_FILE"
+
+        else
+                :
+        fi
+
+        if /bin/podman inspect --format '{{.State.Health.Status}}' "$container_id" |grep -q "healthy" && [ "$alert_status" -eq 1 ];
+        then
+                subject="Podman Health Status Alert: $container_name"
+                echo "$container_name has returned to a healthy state!" | mailx -s "$subject" -S v15-compat=yes -Ssmtp-auth=none -S mta=smtp://smtp.usm.edu:25 $EMAIL
+
+                # Reset the alert status to 0 for this container in the JSON file
+                jq ".[\"$container_name\"] = 0" "$ALERT_FILE" > "$ALERT_FILE.tmp"
+                mv "$ALERT_FILE.tmp" "$ALERT_FILE"
         else
                 :
         fi
