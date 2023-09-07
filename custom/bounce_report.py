@@ -5,13 +5,15 @@ from email.mime.multipart import MIMEMultipart
 import pickle
 import argparse
 import subprocess
+import json
+
 
 
 # creating command line options for running different parts of the script
 parser = argparse.ArgumentParser(description='Bounce report script')
 parser.add_argument('-r', '--report', action='store_true', help='Send bounce report to list owners, if any.')
 parser.add_argument('-p', '--purge', action='store_true', help='Purge emails from lists that have bounced. Requires --report or --noaction to be ran beforehand. Bounce data is wiped following the purge.')
-parser.add_argument('-n', '--noaction', action='store_true', help='Build the binary data file without performing any actions with it. This is mainly for testing purposes.')
+parser.add_argument('-n', '--noaction', action='store_true', help='Build the binary data file without performing any actions with it. Also prints out the bounce data to terminal for viewing. This is mainly for testing purposes')
 args = parser.parse_args()
 
 # API variables
@@ -23,8 +25,6 @@ auth = (apiuser, apipass)
 # declaring dictionary for keeping api data
 result = {}
 bouncefile = 'bounces.pk'
-
-
 
 # Email config
 email_server = 'smtp.usm.edu'
@@ -150,6 +150,12 @@ def wipe_data():
 
 
 
+# function to print the result data in json for viewing in terminal
+def print_data():
+    print(json.dumps(result, indent=4))
+
+
+
 # purging the bounced emails from the system and resetting the binary file
 def purge():
     errors = []
@@ -186,6 +192,7 @@ def main():
             get_owner()
             get_list()
             if result:
+                print_data()
                 persist_data()
             else:
                 print("no data found")
@@ -204,6 +211,7 @@ def main():
             print('Please provide a valid option. See --help.')
 
         # print(json.dumps(result, indent=4))
+
 
 
 if __name__ == "__main__":
