@@ -120,8 +120,8 @@ def send_report():
         bouncee = j['bouncee']
 
         subject = f"Bounce report for {list_email}"
-        body = f"You are receiving this email because you are an owner of a USM mailing list.\n\n"
-        body += f"Here is your monthly bounce report for {list_email}:\n"
+        body = f"You are receiving this email because you are an owner of {list_email}.\n\n"
+        body += f"The following emails have bounced in the past 30 days:\n\n"
 
         for k in bouncee:
             email = k['email']
@@ -159,7 +159,7 @@ def print_data():
 # purging the bounced emails from the system and resetting the binary file
 def purge():
     errors = []
-    cmd = f'mailman --run-as-root delmembers -m {email} --fromall'
+    # cmd = f'mailman --run-as-root delmembers -m {email} --fromall'
     with open(bouncefile, 'rb') as f:
         pkdata = pickle.load(f)
         # print(json.dumps(pkdata, indent=4))
@@ -169,6 +169,7 @@ def purge():
 
             for k in bouncee_list:
                 email = k['email']
+                cmd = f'mailman --run-as-root delmembers -m {email} --fromall'
                 # print(email)
                 try:
                     subprocess.run(cmd, shell=True, check=True)
@@ -207,6 +208,7 @@ def main():
                 print("no data found")
         elif args.purge:
             purge()
+            wipe_data()
         else:
             print('Please provide a valid option. See --help.')
 
